@@ -16,18 +16,17 @@ import hudson.Launcher;
 import hudson.model.AbstractProject;
 import hudson.model.Node;
 import hudson.model.Project;
-import hudson.model.Build;
 import hudson.model.TaskListener;
 import hudson.plugins.mercurial.HgExe;
 import hudson.plugins.mercurial.MercurialSCM;
 import hudson.plugins.mercurial.MercurialTagAction;
-import hudson.plugins.mercurial.AbstractComparator;
+import hudson.plugins.mercurial.ChangeComparator;
 import hudson.scm.PollingResult.Change;
 
 @Extension
-public class MercurialComparator extends AbstractComparator {
+public class MercurialComparator extends ChangeComparator {
 
-	private String LOG_PREFIX = "[PREINT-HG] ";
+	private static final String LOG_PREFIX = "[PREINT-HG] ";
 	
 	public Change compare(MercurialSCM scm, Launcher launcher, TaskListener listener, MercurialTagAction baseline, PrintStream output, Node node, FilePath repository, AbstractProject<?,?> project)  
 			throws IOException, InterruptedException {
@@ -48,8 +47,8 @@ public class MercurialComparator extends AbstractComparator {
 				}
 			}
 			
-			if(buildWrapper != null && buildWrapper.getScmBridge() instanceof MercurialBridge) {
-				MercurialBridge bridge = (MercurialBridge) buildWrapper.getScmBridge();
+			if(buildWrapper != null && buildWrapper.scmBridge instanceof MercurialBridge) {
+				MercurialBridge bridge = (MercurialBridge) buildWrapper.scmBridge;
 
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				
